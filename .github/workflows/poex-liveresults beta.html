@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Ranking</title>
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color:grey;
+    }
+    tr:nth-child(even) {
+        background-color:lightblue;
+    }
+    input[type=text] {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+</style>
+</head>
+<body>
+
+<h2>Time Trial Software</h2>
+<h3>by Lapoex</h3>
+<table id="rankingTable">
+  <tr>
+    <th>Name</th>
+    <th>Bib</th>
+    <th>Team</th>
+    <th>Time</th>
+  </tr>
+</table>
+
+<form id="inputForm">
+  <label for="name">Name:</label><br>
+  <input type="text" id="name" name="name"><br>
+  <label for="bib">Bib:</label><br>
+  <input type="text" id="bib" name="bib"><br>
+  <label for="team">Team:</label><br>
+  <input type="text" id="team" name="team"><br>
+  <label for="time">Time:</label><br>
+  <input type="text" id="time" name="time"><br><br>
+  <input type="button" value="Add to Ranking" onclick="addRow()">
+</form>
+
+<button onclick="startStopwatch()">Start Stopwatch</button>
+<span id="stopwatch">00:00:00</span>
+
+<script>
+var stopwatchInterval;
+var startTime;
+var stopwatchRunning = false;
+
+function startStopwatch() {
+    if (!stopwatchRunning) {
+        startTime = Date.now();
+        stopwatchInterval = setInterval(updateStopwatch, 1000);
+        stopwatchRunning = true;
+    }
+}
+
+function updateStopwatch() {
+    var currentTime = Date.now();
+    var elapsedTime = currentTime - startTime;
+    var formattedTime = formatTime(elapsedTime);
+    document.getElementById("stopwatch").textContent = formattedTime;
+}
+
+function formatTime(milliseconds) {
+    var totalSeconds = Math.floor(milliseconds / 1000);
+    var hours = Math.floor(totalSeconds / 3600);
+    var minutes = Math.floor((totalSeconds % 3600) / 60);
+    var seconds = totalSeconds % 60;
+    return pad(hours) + ":" + pad(minutes) + ":" + pad(seconds);
+}
+
+function pad(number) {
+    if (number < 10) {
+        return "0" + number;
+    }
+    return number;
+}
+
+function addRow() {
+    var name = document.getElementById("name").value;
+    var bib = document.getElementById("bib").value;
+    var team = document.getElementById("team").value;
+    var time = document.getElementById("stopwatch").textContent;
+
+    var table = document.getElementById("rankingTable");
+    var row = table.insertRow(-1);
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    var cell4 = row.insertCell(3);
+    cell1.innerHTML = name;
+    cell2.innerHTML = bib;
+    cell3.innerHTML = team;
+    cell4.innerHTML = time;
+
+    document.getElementById("inputForm").reset();
+    resetStopwatch();
+}
+
+function resetStopwatch() {
+    clearInterval(stopwatchInterval);
+    document.getElementById("stopwatch").textContent = "00:00:00";
+    stopwatchRunning = false;
+}
+</script>
+
+</body>
+</html>
+```
+
+Now, when you click the "Start Stopwatch" button, it will begin counting time. When you input the name, bib, team, and other information, the current
